@@ -30,7 +30,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
       <div class="container">
-        <a class="navbar-brand" href="{% url 'diary:index' %]">Start Bootstrap</a>
+        <a class="navbar-brand" href="{% url 'diary:index' %}">じぶん日記</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -39,18 +39,40 @@
             <li class="nav-item {% block active_inquiry %}{% endblock %}">
               <a class="nav-link" href="{% url 'diary:inquiry' %}">INQUIRY</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Sign Up</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Log In</a>
-            </li>
+            {% if user.is_authenticated %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'account_logout' %}">Log Out</a>
+              </li>
+            {% else %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'account_signup' %}">Sign Up</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'account_login' %}">Log In</a>
+              </li>
+            {% endif %}
           </ul>
         </div>
       </div>
     </nav>
 
     {% block header %}{% endblock %}
+
+    {% if messages %}
+      <div class="container">
+        <div class="row">
+          <div class="my-div-style w-100">
+            <ul class="messages" style="list-style: none;">
+              {% for message in messages %}
+                <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>
+                  {{ message }}
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    {% endif %}
 
     {% block contents %}{% endblock %}
 
